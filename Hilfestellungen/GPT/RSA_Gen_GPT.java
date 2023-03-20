@@ -1,4 +1,4 @@
-package GPT;
+package Hilfestellungen.GPT;
 
 import java.io.*;
 import java.math.BigInteger;
