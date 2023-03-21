@@ -1,0 +1,88 @@
+import java.io.*;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.List;
+
+public class RSA {
+
+    public static void main(String[] args) {
+        // Schlüsselpaar generieren
+        generateKeyPair();
+
+        // Verschlüsseln
+        // encryptFile("text.txt", "pk.txt", "chiffre.txt");
+
+        // Entschlüsseln
+        decryptFile("chiffre.txt", "sk.txt", "text-d.txt");
+    }
+
+    public static void generateKeyPair() {
+        SecureRandom random = new SecureRandom();
+        BigInteger p = BigInteger.probablePrime(512, random);
+        BigInteger q = BigInteger.probablePrime(512, random);
+
+        BigInteger n = p.multiply(q);
+        BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+
+        BigInteger e;
+        do {
+            e = new BigInteger(phi.bitLength(), random);
+        } while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || !e.gcd(phi).equals(BigInteger.ONE));
+
+        BigInteger d = e.modInverse(phi);
+
+        try {
+            Files.write(Paths.get("pk.txt"), (n.toString() + "," + e.toString()).getBytes(StandardCharsets.UTF_8));
+            Files.write(Paths.get("sk.txt"), (n.toString() + "," + d.toString()).getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+            System.err.println("Fehler beim Speichern der Schlüssel: " + ex.getMessage());
+        }
+    }
+
+    public static void encryptFile(String inputFilename, String publicKeyFilename, String outputFilename) {
+        try {
+            String content = new String(Files.readAllBytes(Paths.get(inputFilename)), StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(Paths.get(publicKeyFilename), StandardCharsets.UTF_8);
+            String[] parts = lines.get(0).split(",");
+            BigInteger n = new BigInteger(parts[0]);
+            BigInteger e = new BigInteger(parts[1]);
+
+            StringBuilder cipherText = new StringBuilder();
+            for (char ch : content.toCharArray()) {
+                BigInteger encryptedChar = BigInteger.valueOf(ch).modPow(e, n);
+                cipherText.append(encryptedChar.toString()).append(",");
+            }
+
+            Files.write(Paths.get(outputFilename), cipherText.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+            System.err.println("Fehler beim Verschlüsseln der Datei: " + ex.getMessage());
+        }
+    }
+
+    public static void decryptFile(String inputFilename, String privateKeyFilename, String outputFilename) {
+        try {
+            List<String> encryptedLines = Files.readAllLines(Paths.get(inputFilename), StandardCharsets.UTF_8);
+            String[] encryptedChars = encryptedLines.get(0).split(",");
+            List<String> privateKeyLines = Files.readAllLines(Paths.get(privateKeyFilename), StandardCharsets.UTF_8);
+            String[] parts = privateKeyLines.get(0).split(",");
+            BigInteger n = new BigInteger(parts[0]);
+            BigInteger d = new BigInteger(parts[1]);
+
+            StringBuilder plainText = new StringBuilder();
+            for (String encryptedChar : encryptedChars) {
+                if (!encryptedChar.isEmpty()) {
+                    BigInteger decryptedChar = new BigInteger(encryptedChar).modPow(d, n);
+                    plainText.append((char) decryptedChar.intValue());
+                }
+            }
+
+            Files.write(Paths.get(outputFilename), plainText.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException ex) {
+            System.err.println("Fehler beim Entschlüsseln der Datei: " + ex.getMessage());
+        }
+    }
+
+} // End of the RSACipher class
