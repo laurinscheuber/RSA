@@ -1,4 +1,4 @@
-package src.ch.fhnw.mada;
+package hilfestellungen.basivio.src.ch.fhnw.mada;
 
 import java.io.File;
 import java.io.IOException;

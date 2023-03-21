@@ -1,4 +1,4 @@
-package Hilfestellungen.GPT;
+package hilfestellungen.GPT;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -12,7 +12,7 @@ public class RSA_Gen_GPT {
     private static final SecureRandom random = new SecureRandom();
     private static final String privateKeyFile = "sk.txt";
     private static final String publicKeyFile = "pk.txt";
-    private static final String textFile = "text.txt";
+    private static final String textFile = "/Hilfestellung/RSA/text.txt";
     private static final String cipherFile = "chiffre.txt";
 
     public static void main(String[] args) {
@@ -24,7 +24,7 @@ public class RSA_Gen_GPT {
         saveKeyToFile(privateKeyFile, n, d);
         saveKeyToFile(publicKeyFile, n, e);
 
-        String text = readTextFromFile("/Hilfestellung/GPT/",textFile);
+        String text = readTextFromFile(textFile);
         BigInteger[] encryptedText = encryptText(text, n, e);
         writeCipherToFile("Hilfestellung/GPT/" + cipherFile, encryptedText);
     }

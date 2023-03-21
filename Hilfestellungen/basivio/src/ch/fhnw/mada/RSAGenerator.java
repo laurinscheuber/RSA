@@ -1,4 +1,4 @@
-package src.ch.fhnw.mada;
+package hilfestellungen.basivio.src.ch.fhnw.mada;
 
 public class RSAGenerator {
   private static final String PATH = "generated/";

@@ -1,4 +1,4 @@
-package src.ch.fhnw.mada;
+package hilfestellungen.basivio.src.ch.fhnw.mada;
 
 import java.math.BigInteger;
 import java.util.Random;
