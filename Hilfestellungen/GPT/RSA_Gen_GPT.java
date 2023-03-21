@@ -24,9 +24,9 @@ public class RSA_Gen_GPT {
         saveKeyToFile(privateKeyFile, n, d);
         saveKeyToFile(publicKeyFile, n, e);
 
-        String text = readTextFromFile(textFile);
+        String text = readTextFromFile("/Hilfestellung/GPT/",textFile);
         BigInteger[] encryptedText = encryptText(text, n, e);
-        writeCipherToFile(cipherFile, encryptedText);
+        writeCipherToFile("Hilfestellung/GPT/" + cipherFile, encryptedText);
     }
 
     private static BigInteger[] generateKeys(int bitLength) {
