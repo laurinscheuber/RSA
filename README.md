@@ -4,7 +4,7 @@ Dieses Java-Programm führt die Generierung von RSA-Schlüsselpaaren, Verschlüs
 
 ## Ablauf
 
-1. Generierung eines RSA-Schlüsselpaars realistischer Größe
+1. Generierung eines RSA-Schlüsselpaars (1024 Bit)
 2. Verschlüsselung einer Textdatei (ASCII) namens `text.txt` mit dem öffentlichen Schlüssel aus der Datei `pk.txt`
 3. Entschlüsselung einer Datei namens `chiffre.txt` mit dem privaten Schlüssel aus der Datei `sk.txt`
 4. Ausgabe des entschlüsselten Textes in der Datei `text-d.txt`
