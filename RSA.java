@@ -30,7 +30,7 @@ public class RSA {
         BigInteger e;
         do {
             e = new BigInteger(phi.bitLength(), random);
-        } while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || !e.gcd(phi).equals(BigInteger.ONE));
+        } while (e.compareTo(BigInteger.ONE) == 0 || e.compareTo(phi) == 0 || !e.gcd(phi).equals(BigInteger.ONE));
 
         BigInteger d = e.modInverse(phi);
 
@@ -67,7 +67,9 @@ public class RSA {
             List<String> encryptedLines = Files.readAllLines(Paths.get(inputFilename), StandardCharsets.UTF_8);
             String[] encryptedChars = encryptedLines.get(0).split(",");
             List<String> privateKeyLines = Files.readAllLines(Paths.get(privateKeyFilename), StandardCharsets.UTF_8);
-            String[] parts = privateKeyLines.get(0).split(",");
+
+            // zuerst Klammern vom Key entfernen, dann splitten
+            String[] parts = privateKeyLines.get(0).substring(1, privateKeyLines.get(0).length()-1).split(",");
             BigInteger n = new BigInteger(parts[0]);
             BigInteger d = new BigInteger(parts[1]);
 
