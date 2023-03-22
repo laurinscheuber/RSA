@@ -13,7 +13,7 @@ public class RSA {
         generateKeyPair();
 
         // Verschlüsseln
-        // encryptFile("text.txt", "pk.txt", "chiffre.txt");
+        encryptFile("text.txt", "pk.txt", "chiffre.txt");
 
         // Entschlüsseln
         decryptFile("chiffre.txt", "sk.txt", "text-d.txt");
@@ -21,8 +21,8 @@ public class RSA {
 
     public static void generateKeyPair() {
         SecureRandom random = new SecureRandom();
-        BigInteger p = BigInteger.probablePrime(512, random);
-        BigInteger q = BigInteger.probablePrime(512, random);
+        BigInteger p = BigInteger.probablePrime(1024, random);
+        BigInteger q = BigInteger.probablePrime(1024, random);
 
         BigInteger n = p.multiply(q);
         BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
