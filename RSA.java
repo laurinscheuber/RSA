@@ -13,7 +13,7 @@ public class RSA {
         generateKeyPair();
 
         // Verschlüsseln
-        //encryptFile("text.txt", "pk.txt", "chiffre.txt");
+        encryptFile("text.txt", "pk.txt", "chiffre.txt");
 
         // Entschlüsseln
         decryptFile("chiffre.txt", "sk.txt", "text-d.txt");
@@ -31,6 +31,72 @@ public class RSA {
         do {
             e = new BigInteger(phi.bitLength(), random);
         } while (e.compareTo(BigInteger.ONE) == 0 || e.compareTo(phi) == 0 || !e.gcd(phi).equals(BigInteger.ONE));
+
+        // create method with euklid algorithm to create d
+
+        //public BigInteger euklidischAlgorith(BigInteger p, BigInteger q) {
+        //    BigInteger x = BigInteger.ZERO;
+        //    BigInteger y = BigInteger.ONE;
+        //    BigInteger lastX = BigInteger.ONE;
+        //    BigInteger lastY = BigInteger.ZERO;
+        //    BigInteger temp;
+        //
+        //    while (!b.equals(BigInteger.ZERO)) {
+        //        BigInteger[] quotientAndRemainder = a.divideAndRemainder(b);
+        //        BigInteger quotient = quotientAndRemainder[0];
+        //
+        //        a = b;
+        //        b = quotientAndRemainder[1];
+        //
+        //        temp = x;
+        //        x = lastX.subtract(quotient.multiply(x));
+        //        lastX = temp;
+        //
+        //        temp = y;
+        //        y = lastY.subtract(quotient.multiply(y));
+        //        lastY = temp;
+        //    }
+        //
+        //    if (lastY.signum() < 0) {
+        //        lastY = lastY.add(a);
+        //    }
+        //
+        //    return lastY;
+        //}
+
+//        final BigInteger euklidischAlgorithm(BigInteger p, BigInteger q) {
+//            BigInteger x = BigInteger.ZERO;
+//            BigInteger y = BigInteger.ONE;
+//            BigInteger lastX = BigInteger.ONE;
+//            BigInteger lastY = BigInteger.ZERO;
+//            BigInteger temp;
+//
+//            while (!b.equals(BigInteger.ZERO)) {
+//                BigInteger[] quotientAndRemainder = a.divideAndRemainder(b);
+//                BigInteger quotient = quotientAndRemainder[0];
+//            
+//                a = b;
+//                b = quotientAndRemainder[1];
+//            
+//                temp = x;
+//                x = lastX.subtract(quotient.multiply(x));
+//                lastX = temp;
+//            
+//                temp = y;
+//                y = lastY.subtract(quotient.multiply(y));
+//                lastY = temp;
+//            }
+//        
+//            if (lastY.signum() < 0) {
+//                lastY = lastY.add(phi); // Hier verwenden wir 'phi', anstatt 'a' zu verwenden.
+//            }
+//        
+//            return lastY;
+//        }
+//
+//        BigInteger d = euklidischAlgorithm(e, phi);
+
+
 
         BigInteger d = e.modInverse(phi);
 
@@ -69,7 +135,7 @@ public class RSA {
             List<String> privateKeyLines = Files.readAllLines(Paths.get(privateKeyFilename), StandardCharsets.UTF_8);
 
             // zuerst Klammern vom Key entfernen, dann splitten
-            String[] parts = privateKeyLines.get(0).substring(1, privateKeyLines.get(0).length()-1).split(",");
+            String[] parts = privateKeyLines.get(0).substring(1, privateKeyLines.get(0).length() - 1).split(",");
             BigInteger n = new BigInteger(parts[0]);
             BigInteger d = new BigInteger(parts[1]);
 
