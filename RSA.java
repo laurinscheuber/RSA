@@ -13,7 +13,7 @@ public class RSA {
         generateKeyPair();
 
         // Verschlüsseln
-        encryptFile("text.txt", "pk.txt", "chiffre.txt");
+        //encryptFile("text.txt", "pk.txt", "chiffre.txt");
 
         // Entschlüsseln
         decryptFile("chiffre.txt", "sk.txt", "text-d.txt");
