@@ -102,7 +102,7 @@ public class RSA {
 
         try {
             Files.write(Paths.get("pk.txt"), (n.toString() + "," + e.toString()).getBytes(StandardCharsets.UTF_8));
-            Files.write(Paths.get("sk.txt"), (n.toString() + "," + d.toString()).getBytes(StandardCharsets.UTF_8));
+            Files.write(Paths.get("sk.txt"), ("(" + n.toString() + "," + d.toString() + ")").getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             System.err.println("Fehler beim Speichern der Schlüssel: " + ex.getMessage());
         }
