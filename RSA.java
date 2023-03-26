@@ -20,13 +20,18 @@ public class RSA {
     }
 
     public static void generateKeyPair() {
+
+        // 1.a) Mit Hilfe der Klasse BigInteger zwei unterschiedliche Primzahlen zufällig generieren und multiplizieren
         SecureRandom random = new SecureRandom();
         BigInteger p = BigInteger.probablePrime(1024, random);
         BigInteger q = BigInteger.probablePrime(1024, random);
 
+        // 1.b)
+        // phi(n)=(p-1)*(q-1)
         BigInteger n = p.multiply(q);
         BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 
+        // "e" so wählen, dass 1 < e < φ(n) und e und φ (n) ggT sind.
         BigInteger e;
         do {
             e = new BigInteger(phi.bitLength(), random);
@@ -34,6 +39,7 @@ public class RSA {
 
         // create method with euklid algorithm to create d
 
+        // Erweiterter euklidischer Algorithmus
         //public BigInteger euklidischAlgorith(BigInteger p, BigInteger q) {
         //    BigInteger x = BigInteger.ZERO;
         //    BigInteger y = BigInteger.ONE;
@@ -97,17 +103,24 @@ public class RSA {
 //        BigInteger d = euklidischAlgorithm(e, phi);
 
 
-
+        // Ersetzen mit Euklid
         BigInteger d = e.modInverse(phi);
 
+        // TODO #1: Ergebnisse zurück geben, bzw. in File rein schreiben, stimmt das?
         try {
             Files.write(Paths.get("pk.txt"), (n.toString() + "," + e.toString()).getBytes(StandardCharsets.UTF_8));
             Files.write(Paths.get("sk.txt"), ("(" + n.toString() + "," + d.toString() + ")").getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
+
+            // Falls failt, wird diese Fehlermeldung angezeigt.
             System.err.println("Fehler beim Speichern der Schlüssel: " + ex.getMessage());
         }
     }
 
+    // Verschlüsseln mit schneller Exponentation und jedes Zeichen in ASCII-Code umwandeln
+    // inputFileName: "text.txt",
+    // publicKeyFilename: "pk.txt",
+    // outputFilename: "chiffre.txt"
     public static void encryptFile(String inputFilename, String publicKeyFilename, String outputFilename) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(inputFilename)), StandardCharsets.UTF_8);
@@ -128,13 +141,18 @@ public class RSA {
         }
     }
 
+
+    // Entschlüsseln mit schneller Exponentation
+    // inputFileName: "text.txt",
+    // publicKeyFilename: "pk.txt",
+    // outputFilename: "chiffre.txt"
     public static void decryptFile(String inputFilename, String privateKeyFilename, String outputFilename) {
         try {
             List<String> encryptedLines = Files.readAllLines(Paths.get(inputFilename), StandardCharsets.UTF_8);
             String[] encryptedChars = encryptedLines.get(0).split(",");
             List<String> privateKeyLines = Files.readAllLines(Paths.get(privateKeyFilename), StandardCharsets.UTF_8);
 
-            // zuerst Klammern vom Key entfernen, dann splitten
+            // Zuerst Klammern vom Key entfernen, dann splitten nach dem Komma.
             String[] parts = privateKeyLines.get(0).substring(1, privateKeyLines.get(0).length() - 1).split(",");
             BigInteger n = new BigInteger(parts[0]);
             BigInteger d = new BigInteger(parts[1]);
@@ -153,4 +171,4 @@ public class RSA {
         }
     }
 
-} // End of the RSACipher class
+}
