@@ -85,6 +85,28 @@ public class RSA {
     // publicKeyFilename: "pk.txt",
     // outputFilename: "chiffre.txt"
     // TODO #2: add fastExp calculation
+
+    public static int fastExponentationCalculation (int x, int e, int n) { // (x^e) % n
+        String binaryE = Integer.toBinaryString(e);
+        int k;
+        k = x;
+        int h = 1;
+        int i = binaryE.length() - 1;
+
+        /* Durchloopen der Binär-Darstellung von e, solange bis alle Stellen
+        abgearbeitet sind. Bei jedem Index überprüfen, ob der Wert 0 oder 1 ist
+        und entsprechende Berechnungen machen oder auslassen.
+         */
+        while (i >= 0) {
+            if (binaryE.charAt(i) == '1') {
+                h = (k * h) % n;
+            }
+            k = (k * k) % n;
+            i--;
+        }
+        return h;
+    }
+
     public static void encryptFile(String inputFilename, String publicKeyFilename, String outputFilename) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(inputFilename)), StandardCharsets.UTF_8);

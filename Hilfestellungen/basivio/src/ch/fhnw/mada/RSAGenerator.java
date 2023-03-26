@@ -1,3 +1,4 @@
+/*
 package hilfestellungen.basivio.src.ch.fhnw.mada;
 
 public class RSAGenerator {
@@ -23,3 +24,4 @@ public class RSAGenerator {
     System.out.println("Entschlüsselter Text von Herrn Vogt: " + RSA.decryptFile("chiffre.txt", "sk.txt"));
   }
 }
+*/
