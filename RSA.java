@@ -37,74 +37,10 @@ public class RSA {
             e = new BigInteger(phi.bitLength(), random);
         } while (e.compareTo(BigInteger.ONE) == 0 || e.compareTo(phi) == 0 || !e.gcd(phi).equals(BigInteger.ONE));
 
-        // create method with euklid algorithm to create d
-
-        // Erweiterter euklidischer Algorithmus
-        //public BigInteger euklidischAlgorith(BigInteger p, BigInteger q) {
-        //    BigInteger x = BigInteger.ZERO;
-        //    BigInteger y = BigInteger.ONE;
-        //    BigInteger lastX = BigInteger.ONE;
-        //    BigInteger lastY = BigInteger.ZERO;
-        //    BigInteger temp;
-        //
-        //    while (!b.equals(BigInteger.ZERO)) {
-        //        BigInteger[] quotientAndRemainder = a.divideAndRemainder(b);
-        //        BigInteger quotient = quotientAndRemainder[0];
-        //
-        //        a = b;
-        //        b = quotientAndRemainder[1];
-        //
-        //        temp = x;
-        //        x = lastX.subtract(quotient.multiply(x));
-        //        lastX = temp;
-        //
-        //        temp = y;
-        //        y = lastY.subtract(quotient.multiply(y));
-        //        lastY = temp;
-        //    }
-        //
-        //    if (lastY.signum() < 0) {
-        //        lastY = lastY.add(a);
-        //    }
-        //
-        //    return lastY;
-        //}
-
-//        final BigInteger euklidischAlgorithm(BigInteger p, BigInteger q) {
-//            BigInteger x = BigInteger.ZERO;
-//            BigInteger y = BigInteger.ONE;
-//            BigInteger lastX = BigInteger.ONE;
-//            BigInteger lastY = BigInteger.ZERO;
-//            BigInteger temp;
-//
-//            while (!b.equals(BigInteger.ZERO)) {
-//                BigInteger[] quotientAndRemainder = a.divideAndRemainder(b);
-//                BigInteger quotient = quotientAndRemainder[0];
-//            
-//                a = b;
-//                b = quotientAndRemainder[1];
-//            
-//                temp = x;
-//                x = lastX.subtract(quotient.multiply(x));
-//                lastX = temp;
-//            
-//                temp = y;
-//                y = lastY.subtract(quotient.multiply(y));
-//                lastY = temp;
-//            }
-//        
-//            if (lastY.signum() < 0) {
-//                lastY = lastY.add(phi); // Hier verwenden wir 'phi', anstatt 'a' zu verwenden.
-//            }
-//        
-//            return lastY;
-//        }
-//
-//        BigInteger d = euklidischAlgorithm(e, phi);
-
-
         // Ersetzen mit Euklid
-        BigInteger d = e.modInverse(phi);
+        // BigInteger d = e.modInverse(phi);
+        BigInteger[] result = extEuclid(e, phi);
+        BigInteger d = result[2];
 
         // TODO #1: Ergebnisse zurück geben, bzw. in File rein schreiben, stimmt das?
         try {
@@ -115,6 +51,34 @@ public class RSA {
             // Falls failt, wird diese Fehlermeldung angezeigt.
             System.err.println("Fehler beim Speichern der Schlüssel: " + ex.getMessage());
         }
+    }
+
+    // Erweiterter euklidischer Algorithmus
+    private static BigInteger[] extEuclid(BigInteger a, BigInteger b) {
+        BigInteger x0 = BigInteger.ONE;
+        BigInteger y0 = BigInteger.ZERO;
+        BigInteger x1 = BigInteger.ZERO;
+        BigInteger y1 = BigInteger.ONE;
+        BigInteger gcd = a;
+
+        while (!b.equals(BigInteger.ZERO)) {
+            BigInteger[] div = a.divideAndRemainder(b);
+            BigInteger q = div[0];
+            BigInteger tmp = b;
+            b = div[1];
+            a = tmp;
+
+            BigInteger x2 = x0.subtract(q.multiply(x1));
+            x0 = x1;
+            x1 = x2;
+
+            BigInteger y2 = y0.subtract(q.multiply(y1));
+            y0 = y1;
+            y1 = y2;
+        }
+
+        BigInteger[] result = { x0, y0, gcd };
+        return result;
     }
 
     // Verschlüsseln mit schneller Exponentation und jedes Zeichen in ASCII-Code umwandeln
