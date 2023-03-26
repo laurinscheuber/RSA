@@ -118,6 +118,7 @@ public class RSA {
     }
 
     // Verschlüsseln mit schneller Exponentation und jedes Zeichen in ASCII-Code umwandeln
+    // x^e mod n
     // inputFileName: "text.txt",
     // publicKeyFilename: "pk.txt",
     // outputFilename: "chiffre.txt"
@@ -143,6 +144,7 @@ public class RSA {
 
 
     // Entschlüsseln mit schneller Exponentation
+    // y^d mod n
     // inputFileName: "text.txt",
     // publicKeyFilename: "pk.txt",
     // outputFilename: "chiffre.txt"
