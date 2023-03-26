@@ -13,14 +13,13 @@ public class RSA {
         generateKeyPair();
 
         // Verschlüsseln
-        encryptFile("text.txt", "pk.txt", "chiffre.txt");
+         encryptFile("text.txt", "pk.txt", "chiffre.txt");
 
         // Entschlüsseln
         decryptFile("chiffre.txt", "sk.txt", "text-d.txt");
     }
 
     public static void generateKeyPair() {
-
         // 1.a) Mit Hilfe der Klasse BigInteger zwei unterschiedliche Primzahlen zufällig generieren und multiplizieren
         SecureRandom random = new SecureRandom();
         BigInteger p = BigInteger.probablePrime(1024, random);
@@ -31,18 +30,17 @@ public class RSA {
         BigInteger n = p.multiply(q);
         BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
 
-        // "e" so wählen, dass 1 < e < φ(n) und e und φ (n) ggT sind.
+        // "e" so wählen, dass 1 < e < φ(n) und e und φ(n) ggT sind.
         BigInteger e;
         do {
             e = new BigInteger(phi.bitLength(), random);
         } while (e.compareTo(BigInteger.ONE) == 0 || e.compareTo(phi) == 0 || !e.gcd(phi).equals(BigInteger.ONE));
 
-        // Ersetzen mit Euklid
-        // BigInteger d = e.modInverse(phi);
-        BigInteger[] result = extEuclid(e, phi);
+        // Entschlüssungszahl mit dem erweiterten euklidischen Algo finden.
+        BigInteger[] result = extEuclid(phi, e);
         BigInteger d = result[2];
 
-        // TODO #1: Ergebnisse zurück geben, bzw. in File rein schreiben, stimmt das?
+        // Generierte Keys in die zugehörigen Files reinschreiben.
         try {
             Files.write(Paths.get("pk.txt"), (n.toString() + "," + e.toString()).getBytes(StandardCharsets.UTF_8));
             Files.write(Paths.get("sk.txt"), ("(" + n.toString() + "," + d.toString() + ")").getBytes(StandardCharsets.UTF_8));
@@ -77,9 +75,9 @@ public class RSA {
             y1 = y2;
         }
 
-        BigInteger[] result = { x0, y0, gcd };
+        BigInteger[] result = {  gcd, x0, y0 };
         return result;
-    }
+}
 
     // Verschlüsseln mit schneller Exponentation und jedes Zeichen in ASCII-Code umwandeln
     // x^e mod n
