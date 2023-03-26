@@ -79,34 +79,28 @@ public class RSA {
         return result;
 }
 
-    // Verschlüsseln mit schneller Exponentation und jedes Zeichen in ASCII-Code umwandeln
-    // x^e mod n
-    // inputFileName: "text.txt",
-    // publicKeyFilename: "pk.txt",
-    // outputFilename: "chiffre.txt"
-    // TODO #2: add fastExp calculation
-
-    public static int fastExponentationCalculation (int x, int e, int n) { // (x^e) % n
-        String binaryE = Integer.toBinaryString(e);
-        int k;
+    public static BigInteger fastExpCalc(BigInteger x, BigInteger e, BigInteger n) { // (x^e) % n
+        String binaryE = e.toString(2);
+        BigInteger k, h;
         k = x;
-        int h = 1; // wird zur Berechnung benötigt
+        h = BigInteger.ONE; // wird zur Berechnung benötigt
         int i = binaryE.length() - 1;
 
-        /* Durchloopen der Binär-Darstellung von e, solange bis alle Stellen
-        abgearbeitet sind. Bei jedem Index überprüfen, ob der Wert 0 oder 1 ist
-        und entsprechende Berechnungen machen oder auslassen.
-         */
         while (i >= 0) {
             if (binaryE.charAt(i) == '1') {
-                h = (k * h) % n;
+                h = k.multiply(h).mod(n);
             }
-            k = (k * k) % n;
+            k = k.multiply(k).mod(n);
             i--;
         }
         return h;
     }
 
+    // Verschlüsseln mit schneller Exponentation und jedes Zeichen in ASCII-Code umwandeln
+    // x^e mod n
+    // inputFileName: "text.txt",
+    // publicKeyFilename: "pk.txt",
+    // outputFilename: "chiffre.txt"
     public static void encryptFile(String inputFilename, String publicKeyFilename, String outputFilename) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(inputFilename)), StandardCharsets.UTF_8);
@@ -147,7 +141,8 @@ public class RSA {
             StringBuilder plainText = new StringBuilder();
             for (String encryptedChar : encryptedChars) {
                 if (!encryptedChar.isEmpty()) {
-                    BigInteger decryptedChar = new BigInteger(encryptedChar).modPow(d, n);
+                    BigInteger y = new BigInteger(encryptedChar);
+                    BigInteger decryptedChar = fastExpCalc(y, d, n);
                     plainText.append((char) decryptedChar.intValue());
                 }
             }
