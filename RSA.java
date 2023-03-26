@@ -122,6 +122,7 @@ public class RSA {
     // inputFileName: "text.txt",
     // publicKeyFilename: "pk.txt",
     // outputFilename: "chiffre.txt"
+    // TODO #2: add fastExp calculation
     public static void encryptFile(String inputFilename, String publicKeyFilename, String outputFilename) {
         try {
             String content = new String(Files.readAllBytes(Paths.get(inputFilename)), StandardCharsets.UTF_8);
