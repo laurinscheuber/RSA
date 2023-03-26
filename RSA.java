@@ -90,7 +90,7 @@ public class RSA {
         String binaryE = Integer.toBinaryString(e);
         int k;
         k = x;
-        int h = 1;
+        int h = 1; // wird zur Berechnung benötigt
         int i = binaryE.length() - 1;
 
         /* Durchloopen der Binär-Darstellung von e, solange bis alle Stellen
