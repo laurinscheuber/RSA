@@ -15,12 +15,10 @@ public class RSA_Laurin {
         generateKeyPair();
 
         // Verschlüsseln
-        encryptFile("text.txt", "pk.txt",
-                "chiffre.txt");
+        encryptFile("text.txt", "pk.txt", "chiffre.txt");
 
         // Entschlüsseln
-        decryptFile("chiffre.txt", "sk.txt",
-                "text-d.txt");
+        decryptFile("chiffre.txt", "sk.txt", "text-d.txt");
     }
 
     public static void generateKeyPair() {
@@ -104,8 +102,10 @@ public class RSA_Laurin {
         BigInteger d = e.modInverse(phi);
 
         try {
-            Files.write(Paths.get("pk.txt"), (n.toString() + "," + e.toString()).getBytes(StandardCharsets.UTF_8));
-            Files.write(Paths.get("sk.txt"), (n.toString() + "," + d.toString()).getBytes(StandardCharsets.UTF_8));
+            Files.write(Paths.get("/laurin/pk.txt"),
+                    (n.toString() + "," + e.toString()).getBytes(StandardCharsets.UTF_8));
+            Files.write(Paths.get("/laurin/sk.txt"),
+                    ("(" + n.toString() + "," + d.toString() + ")").getBytes(StandardCharsets.UTF_8));
         } catch (IOException ex) {
             System.err.println("Fehler beim Speichern der Schlüssel: " + ex.getMessage());
         }
