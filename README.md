@@ -2,6 +2,11 @@
 
 Dieses Java-Programm führt die Generierung von RSA-Schlüsselpaaren, Verschlüsselung und Entschlüsselung von Textdateien durch.
 
+## Anleitung
+
+- Datei entschlüsseln: Methoden `generateKeyPair()` und `encryptFile(...)` auskommentieren, da sonst die Key-Paare überschrieben werden. Main-Methode ausführen.
+- Datei verschüsseln: Methoden `generateKeyPair()` und `encryptFile(...)` *nicht* auskommentieren, da sonst die Key-Paare überschrieben werden. Main-Methode ausführen.
+
 ## Ablauf
 
 1. Generierung eines RSA-Schlüsselpaars (1024 Bit)
